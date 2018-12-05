@@ -1,0 +1,187 @@
+page-main {
+    ion-slides {
+        max-width: 1440px;
+    }
+    .cover1 {
+        max-width: 1440px;
+        height: 40vw;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        position: relative;
+    }
+
+    .cover2 {
+        width: 1440px;
+        height: 40vw;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        position: relative;
+    }
+
+    .m-title {
+        position: absolute;
+        top: 30%;
+        left: 32px;
+        text-align: left;
+        .main-title{
+            font-size: 3rem;
+            color: white;
+            font-weight: bold;
+        }   
+        .sub-title {
+            font-size: 2.5rem;
+            color: white;
+        }
+    }
+    .m-dots {
+        position: absolute;
+        z-index: 1;
+        top: 20vw;
+        display: flex;
+        .m-dot {
+            height: 10px;
+            width: 10px;
+            background-color: rgba($color: white, $alpha: .5);
+            border-radius: 50%;
+            margin: 0 5px;
+        }
+        .clicked {
+            background-color: rgba($color: white, $alpha: 1);
+
+        }
+    }
+    .m-book{
+        position: absolute;
+        z-index: 1;
+        top: 22vw;
+        .book-item {
+            height: 190px;
+            width: 210px;
+            margin: 0 16px;
+            background-color: rgba($color: black, $alpha: .3);
+        }
+        .thumbnail-item {
+            height: 150px;
+            width: 210px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .name-item {
+            width: 100%;
+            height: 40px;
+            text-align: center;
+            font-size: 2rem;
+            text-transform: uppercase;
+            color: white;
+            justify-content: center;
+            display: flex;
+            align-items: center;
+        }
+    }
+    .m-about {
+        position: absolute;
+        width: 400px;
+        color: white;
+        top: 10vw;
+        left: 5vw;
+        background-color: rgba($color: black, $alpha: .4);
+        .m-about-title{
+            font-size: 3rem;
+            padding: 16px 16px 0 16px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        .m-about-sub {
+            font-size: 2rem;
+            padding: 16px;
+        }
+    }
+
+    .m-new-title {
+        padding-top: 16px;
+        width: 1440px;
+        justify-content: space-between;
+        display: flex;
+        .new-title {
+            padding-top: 16px;
+            font-size: 3rem;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        .see-more {
+            font-size: 2rem;
+            font-style: italic;
+            justify-content: flex-end;
+            align-items: flex-end;
+            display: flex;
+            padding-bottom: 5px;
+        }
+    }
+    
+        
+    .new-pic {
+        height: 17vw;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .m-new {
+        max-width: 1440px;
+    }
+
+    .new-item-title {
+        font-size: 2rem;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+    .new-item-des {
+        margin-top: 16px;
+        font-size: 1.5rem;
+        overflow: hidden;
+        line-height: 1.5em;
+        height: 4.5em;
+        width: 100%;
+    }
+    .col-left {
+        margin-right: 10px;
+    }
+    .col-mid {
+        margin: 0 5px;
+    }
+    .col-right {
+        margin-left: 10px;
+    }
+
+    ::-webkit-scrollbar { 
+        display: none; 
+    }
+
+    .m-footer {
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        margin-top: 80px;
+        height: 20vw;
+        position: relative;
+    }
+
+    .m-contact {
+        font-size: 3rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        border-bottom: 3px solid black;
+    }
+    
+    .m-copyright {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+    }
+    
+}
+

@@ -1,0 +1,84 @@
+<!--
+  Generated template for the MainPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>main</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-grid no-padding style="align-items: center">
+    <ion-slides (ionSlideDidChange)="slideChanged($event)" autoplay="3000">
+      <ion-slide *ngFor="let item of listTitle">
+        <div class="cover1" [ngStyle]="{'background-image':'url('+item.thumbnail+')'}">
+          <div class="m-title">
+            <div class="main-title">{{item.title}}</div>
+            <div class="sub-title">{{item.sub_title}}</div>
+          </div>
+        </div>
+      </ion-slide>
+    </ion-slides>
+    <div class="m-dots">
+      <div class="m-dot" *ngFor="let item of listTitle" [class.clicked]="item.id==selected" (click)="onClickDot(item)">
+      </div>
+    </div>
+    <ion-row class="m-book">
+      <ion-col col-3 *ngFor="let item of listBook">
+        <div class="book-item">
+          <div class="thumbnail-item" [ngStyle]="{'background-image':'url('+item.thumbnail+')'}"></div>
+          <div class="name-item">
+            <div>{{item.name}}</div>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="cover2" [ngStyle]="{'background-image':'url(./assets/imgs/book2.jpg)'}">
+      <div class="m-about">
+        <div class="m-about-title">Về chúng tôi</div>
+        <div class="m-about-sub">Mô tả một số thông tin về website các thứ các thứ. Mô tả một số thông tin về website
+          các thứ các thứ. Mô tả một số thông tin về website các thứ các thứ. Mô tả một số thông tin về website các thứ
+          các thứ.</div>
+      </div>
+    </ion-row>
+
+
+    <div class="m-new-title">
+      <div class="new-title">Bản tin gần đây</div>
+      <div class="see-more">Xem thêm</div>
+    </div>
+    <ion-row class="m-new">
+      <ion-col col-4 *ngFor="let item of listNews; let i = index">
+        <div [class.col-left]="i==0" [class.col-right]="i==2" [class.col-mid]="i==1">
+          <div class="new-pic" [ngStyle]="{'background-image':'url('+item.thumbnail+')'}"></div>
+          <div class="new-item-title">{{item.title}}</div>
+          <div class="new-item-des">{{item.description}}</div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid no-padding>
+    <ion-row class="m-footer" [ngStyle]="{'background-image':'url(./assets/imgs/footer-bg.png)'}">
+      <ion-col col-6></ion-col>
+      <ion-col col-6>
+        <div *ngIf="mContact">
+          <div padding-top>
+            <span class="m-contact">{{mContact.title}}</span>
+          </div>
+          <div style="font-size: 2rem; padding-top: 16px">{{mContact.address}}</div>
+          <div style="font-size: 2rem; padding-top: 16px">{{mContact.phone}}</div>
+          <div style="font-size: 2rem; padding-top: 16px">{{mContact.email}}</div>
+        </div>
+      </ion-col>
+      <div class="m-copyright">©2018 Tung Httl</div>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

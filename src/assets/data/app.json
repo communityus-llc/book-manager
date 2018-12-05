@@ -1,0 +1,149 @@
+{
+    "version": "1.0.0",
+    "name": "Cafe 69",
+    "config": {
+        "get_config": false,
+        "android": "http://p2o.wiimob.com/appinasia/config/bongdaphui_android_1.json",
+        "ios": "http://p2o.wiimob.com/appinasia/config/bongdaphui_ios_1.json"
+    },
+    "social": {
+        "facebook": "",
+        "twiter": "",
+        "google_plus": "",
+        "google_play": "",
+        "apple_store": ""
+    },
+    "onesignal": {
+        "enable": false,
+        "app_id": "bfec5fc3-b0c0-4d32-a80d-f32c2331690d",
+        "project_number": "893836876426",
+        "default_onesignal_id": "22d2f455-7a9c-4fb1-9b0f-s382sja22"
+    },
+    "analytics": {
+        "enable": false,
+        "project_id": ""
+    },
+    "network": {
+        "enable": true,
+        "wifi_macaddress_default": "c0:25:e9:41:71:ba",
+        "wifi_ip_address_default": "172.17.17.128",
+        "resources": "http://"
+    },
+    "device": {
+        "uuid_default": "",
+        "name_default": "Web"
+    },
+    "ads": {
+        "enable": false,
+        "platform": "android",
+        "android": {
+            "banner": {
+                "id": "ca-app-pub-5504805357330554/3621021447",
+                "isTesting": false,
+                "autoShow": true,
+                "overlap": true
+            },
+            "interstitial": {
+                "id": "ca-app-pub-5504805357330554/5663541484",
+                "isTesting": false,
+                "autoShow": false
+            }
+        },
+        "ios": {
+            "banner": {
+                "id": "ca-app-pub-5504805357330554/9483366996",
+                "isTesting": false,
+                "autoShow": true,
+                "overlap": true
+            },
+            "interstitial": {
+                "id": "ca-app-pub-5504805357330554/7081878012",
+                "isTesting": false,
+                "autoShow": false
+            }
+        }
+    },
+    "smartfox": {
+        "smartfox_server": "smartfox_test",
+        "smartfox_primary": {
+            "host": "125.212.192.94",
+            "port": 9000,
+            "zone": "Cafe69Zone",
+            "debug": true
+        },
+        "smartfox_test": {
+            "host": "192.168.0.109",
+            "port": 8887,
+            "zone": "BookZone",
+            "debug": true
+        },
+        "smartfox_test_3g": {
+            "host": "127.0.0.1",
+            "port": 8886,
+            "zone": "Cafe69Zone",
+            "debug": true
+        }
+    },
+    "http": {
+        "debug": false,
+        "client_id": "",
+        "client_secret": "",
+        "client_key": "8c24516c23b611420defccf253598412",
+        "api_server": "api_primary",
+        "api_primary": {
+            "host": "http://coreapi.wiads.net/"
+        },
+        "api_test": {
+            "host": ""
+        }
+    },
+    "listNews": [
+        {
+            "id": 1,
+            "title": "Đại hạ giá sách giáo khoa chào mừng năm học mới",
+            "description": "Nhân dịp năm học mới, cửa hàng chúng tôi quyết định giảm giá các loại sách giáo khoa cấp 1 2 3 20% giá trị. Đối với khách hàng mua cả bộ được tặng kèm bộ đồ dùng học tập siêu hấp dẫn.",
+            "time_create": "9 Thg 10, 2018",
+            "thumbnail": "./assets/imgs/book1.jpg"            
+        },
+        {
+            "id": 1,
+            "title": "Đại hạ giá sách giáo khoa chào mừng năm học mới",
+            "description": "Nhân dịp năm học mới, cửa hàng chúng tôi quyết định giảm giá các loại sách giáo khoa cấp 1 2 3 20% giá trị. Đối với khách hàng mua cả bộ được tặng kèm bộ đồ dùng học tập siêu hấp dẫn.",
+            "time_create": "9 Thg 10, 2018",
+            "thumbnail": "./assets/imgs/book1.jpg"
+        },
+        {
+            "id": 1,
+            "title": "Đại hạ giá sách giáo khoa chào mừng năm học mới",
+            "description": "Nhân dịp năm học mới, cửa hàng chúng tôi quyết định giảm giá các loại sách giáo khoa cấp 1 2 3 20% giá trị. Đối với khách hàng mua cả bộ được tặng kèm bộ đồ dùng học tập siêu hấp dẫn.",
+            "time_create": "9 Thg 10, 2018",
+            "thumbnail": "./assets/imgs/book1.jpg"
+        }
+    ],
+    "titleText": [
+        {
+            "id": 1,
+            "title": "Sách ABC1",
+            "sub_title": "Tri thức vô hạn, trí tuệ vô biên",
+            "thumbnail": "./assets/imgs/book1.jpg"
+        },
+        {
+            "id": 2,
+            "title": "Sách ABC2",
+            "sub_title": "Tri thức vô hạn, trí tuệ vô biên",
+            "thumbnail": "./assets/imgs/book1.jpg"
+        },
+        {
+            "id": 3,
+            "title": "Sách ABC3",
+            "sub_title": "Tri thức vô hạn, trí tuệ vô biên",
+            "thumbnail": "./assets/imgs/book1.jpg"
+        }
+    ],
+    "contact": {
+        "title": "Liên hệ",
+        "address": "Địa chỉ: 121 Lê Thanh Nghị, Hai Bà Trưng, Hà Nội",
+        "phone": "Điện thoại: 0123456789",
+        "email": "Email: myEmail@gmail.com"
+    }
+}
