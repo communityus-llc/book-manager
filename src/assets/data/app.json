@@ -107,8 +107,8 @@
         },
         {
             "id": 1,
-            "title": "Đại hạ giá sách giáo khoa chào mừng năm học mới",
-            "description": "Nhân dịp năm học mới, cửa hàng chúng tôi quyết định giảm giá các loại sách giáo khoa cấp 1 2 3 20% giá trị. Đối với khách hàng mua cả bộ được tặng kèm bộ đồ dùng học tập siêu hấp dẫn.",
+            "title": "TÌM KIẾM TRI THỨC TƯƠNG LAI HÃY ĐẾN VỚI BOOK-TMT",
+            "description": "Sách đem lại cho chúng ta nguồn tri thức dồi dào, nhưng bạn cần biết chọn lựa sách phù hợp với bản thân cũng như mục tiêu của mình. Book",
             "time_create": "9 Thg 10, 2018",
             "thumbnail": "./assets/imgs/book1.jpg"
         },
@@ -123,20 +123,20 @@
     "titleText": [
         {
             "id": 1,
-            "title": "Sách ABC1",
-            "sub_title": "Tri thức vô hạn, trí tuệ vô biên",
+            "title": "Book-TMT",
+            "sub_title": "Việc đọc rất quan trọng. Nếu bạn biết cách đọc, cả thế giới sẽ mở ra cho bạn. Barack Obama",
             "thumbnail": "./assets/imgs/book1.jpg"
         },
         {
             "id": 2,
-            "title": "Sách ABC2",
-            "sub_title": "Tri thức vô hạn, trí tuệ vô biên",
+            "title": "Book-TMT",
+            "sub_title": "Bạn càng đọc nhiều, bạn càng biết nhiều. Bạn càng học nhiều, bạn càng đi nhiều. Dr Seuss",
             "thumbnail": "./assets/imgs/book1.jpg"
         },
         {
             "id": 3,
-            "title": "Sách ABC3",
-            "sub_title": "Tri thức vô hạn, trí tuệ vô biên",
+            "title": "Book-TMT",
+            "sub_title": "",
             "thumbnail": "./assets/imgs/book1.jpg"
         }
     ],

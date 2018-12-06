@@ -6,9 +6,18 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>main</ion-title>
-  </ion-navbar>
+  <!-- <div class="m-login">Đăng nhập<div> -->
+  <div class="m-register">
+    <div class="login-box">
+      <ion-input class="user-input" placeholder="Tên Đăng Nhập" type="text" [(ngModel)]="username"></ion-input>
+    </div>
+    <div class="password-box">
+      <ion-input class="user-input" placeholder="Mật Khẩu" type="password" [(ngModel)]="password"></ion-input>
+    </div>
+    <div>
+      <button ion-button>Đăng nhập</button>
+    </div>
+  </div>
 
 </ion-header>
 
@@ -43,16 +52,15 @@
     <ion-row class="cover2" [ngStyle]="{'background-image':'url(./assets/imgs/book2.jpg)'}">
       <div class="m-about">
         <div class="m-about-title">Về chúng tôi</div>
-        <div class="m-about-sub">Mô tả một số thông tin về website các thứ các thứ. Mô tả một số thông tin về website
-          các thứ các thứ. Mô tả một số thông tin về website các thứ các thứ. Mô tả một số thông tin về website các thứ
-          các thứ.</div>
+        <div class="m-about-sub"> Website của chúng tôi đem đến cho bạn nhiều sự lựa chọn với nhiều loại thể loại sách khác nhau: Khoa Học, Văn Học, Sách Giáo Khoa, Anh Ngữ và nhiều thể loại sách khác. Các bạn có thể đến trực tiếp cửa hàng hoặc mua hàng qua website, rất mong muốn được phục vụ các bạn.
+        </div>
       </div>
     </ion-row>
 
 
     <div class="m-new-title">
       <div class="new-title">Bản tin gần đây</div>
-      <div class="see-more">Xem thêm</div>
+      <div class="see-more" (click)="onClickSeeMore()">Xem thêm</div>
     </div>
     <ion-row class="m-new">
       <ion-col col-4 *ngFor="let item of listNews; let i = index">

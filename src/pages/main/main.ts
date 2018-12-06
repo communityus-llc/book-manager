@@ -21,6 +21,9 @@ export class MainPage {
   listTitle: any;
   mContact: any;
 
+  username: string = "";
+  password: string = "";
+
   listBook: Array<any> = [
     {id: 1, name: "Đi tìm lẽ sống", description: "Đi tìm lẽ sống đơn giản là đi tìm cách sống", thumbnail: "./assets/imgs/book3.jpg"},
     {id: 2, name: "Đi tìm lẽ sống", description: "Đi tìm lẽ sống đơn giản là đi tìm cách sống", thumbnail: "./assets/imgs/book3.jpg"},
@@ -64,4 +67,7 @@ export class MainPage {
     this.slides.slideTo(this.selected - 1);
   }
 
+  onClickSeeMore(){
+  this.navCtrl.push("ListbookPage");
+  }
 }
