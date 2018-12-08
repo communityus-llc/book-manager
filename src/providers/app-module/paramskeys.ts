@@ -127,7 +127,6 @@ export class ParamsKey {
     public static NUMBER_DELIVERY: string = "number_delivery";
     public static NUMBER_DONE: string = "number_done";
     public static NUMBER_PROCESS: string = "number_process";
-    public static ORDER_ID: string = "order_id";
     public static TOTAL_MONEY: string = "total_money";
     public static NOTE: string = "note";
     public static SERVICE_FEE: string = "service_fee";
@@ -176,4 +175,12 @@ export class ParamsKey {
 
     public static ADD_TYPE: string = "add_type";
     public static USER: string = "user";
+
+    public static NEW_ID: string = "new_id";
+    public static ORDER_ID: string = "order_id";
+    public static BOOK_ID: string = "book_id";
+
+    public static ORDER_NAME: string = "order_name";
+    public static USER_NAME: string = "user_name";
+    public static TITLE: string = "title";
 }

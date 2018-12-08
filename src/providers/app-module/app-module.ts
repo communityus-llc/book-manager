@@ -4,8 +4,8 @@ import { Http } from '@angular/http';
 import { HTTP } from '@ionic-native/http';
 import { WiadsHttpClient } from './wiads-http-client';
 import { Config } from "../core/app/config";
-import { Platform, Loading, LoadingController } from 'ionic-angular';
-import { BookSFSConnector, UserInfo, DeviceInfo } from '../book-smartfox/book-connector';
+import { Platform, Loading, LoadingController, ToastController, AlertController, ModalController } from 'ionic-angular';
+import { BookSFSConnector } from '../book-smartfox/book-connector';
 import { NetworkManager } from '../core/plugin/network-manager';
 import { NetworkInterface } from '@ionic-native/network-interface';
 import { DeviceManager } from '../core/plugin/device-manager';
@@ -17,8 +17,10 @@ import { Network } from '@ionic-native/network';
 import { StorageController } from '../core/storage';
 import { Storage } from '@ionic/storage';
 import { APPKEYS } from './app-keys';
-import { LOGIN_TYPE } from './app-constants';
 import { ParamsKey } from './paramskeys';
+import { UserBean } from '../bean/UserBean';
+import { DeviceInfo } from '../bean/device-info';
+import { UserInfo } from '../bean/user-info';
 
 /*
   Generated class for the AppModuleProvider provider.
@@ -33,6 +35,11 @@ export class AppModuleProvider {
   private mNetworkController: NetworkConnectController = new NetworkConnectController();
   mStorageController: StorageController = null;
 
+  private mUser: UserBean;
+
+  newDeviceInfo = new DeviceInfo();
+
+
   constructor(
     public http: HttpClient,
     public mAngularHttp: Http,
@@ -44,13 +51,22 @@ export class AppModuleProvider {
     private mNetwork: Network,
     public mStorage: Storage,
     private mLoadingController: LoadingController,
+    private mToastController: ToastController,
+    public mAlertController: AlertController,
+    public mModalController: ModalController,
+
   ) {
     this.mNetworkController._setNetwork(this.mNetwork);
     this.mHttpClient = new WiadsHttpClient();
     this.mAppConfig = new Config();
     this.mStorageController = new StorageController();
     this.mStorageController.setStorage(mStorage);
+    this.mUser = new UserBean();
 
+  }
+
+  public getAlertController(): AlertController {
+    return this.mAlertController;
   }
 
   getHttpClient() {
@@ -63,6 +79,10 @@ export class AppModuleProvider {
 
   getStoreController() {
     return this.mStorageController;
+  }
+
+  public getUser(): UserBean {
+    return this.mUser;
   }
 
   loginSucess() {
@@ -161,12 +181,28 @@ export class AppModuleProvider {
     OneSignalManager.getInstance().setOneSignal(this.mOneSignal);
   }
 
-  newDeviceInfo = new DeviceInfo();
+  doLogin(userInfo: UserInfo) {
+    return new Promise((resolve, reject) => {
+      this.newDeviceInfo.setOnesignalID(OneSignalManager.getInstance().getOneSignalID())
+      this.newDeviceInfo.setName(DeviceManager.getInstance().getDeviceName());
+      this.newDeviceInfo.setPlatform(DeviceManager.getInstance().getPlatform());
+
+      BookSFSConnector.getInstance().login(this.newDeviceInfo, userInfo).then((params) => {
+        BookSFSConnector.getInstance().addListenerForExtensionResponse();
+        return resolve(params);
+      }).catch((err) => {
+        return reject(err);
+      });
+    });
+  }
+
+
   doLoginByGuest() {
     return new Promise((resolve, reject) => {
-      this.newDeviceInfo.onesignal_id = OneSignalManager.getInstance().getOneSignalID();
-      this.newDeviceInfo.name = DeviceManager.getInstance().getDeviceName();
-      this.newDeviceInfo.platform = DeviceManager.getInstance().getPlatform();
+      this.newDeviceInfo.setOnesignalID(OneSignalManager.getInstance().getOneSignalID())
+      this.newDeviceInfo.setName(DeviceManager.getInstance().getDeviceName());
+      this.newDeviceInfo.setPlatform(DeviceManager.getInstance().getPlatform());
+
       BookSFSConnector.getInstance().loadingByGuest(this.newDeviceInfo).then(res => {
         BookSFSConnector.getInstance().addListenerForExtensionResponse();
         return resolve(res);
@@ -182,8 +218,15 @@ export class AppModuleProvider {
     this.addSFSResponeListener();
     if (params) {
       let userdata = params["data"];
-      console.log("userdata: ", userdata.getSFSObject());
-
+      console.log(userdata.getDump());
+      if (userdata.getInt(ParamsKey.LOGIN_TYPE) == 3) {
+        this.showToast("Đăng nhập thành công", 2000, "top");
+      }
+      let sfsUserData = userdata.getSFSObject(ParamsKey.CONTENT);
+      this.mUser.fromSFSObject(sfsUserData);
+      console.log(this.mUser);
+      // let roomToJoin = userdata.getUtfString(ParamsKey.ROOM);
+      // BookSFSConnector.getInstance().requestJoinRoom(roomToJoin);
     }
     OneSignalManager.getInstance().getOneSignalClientID().then((respone) => {
       BookSFSConnector.getInstance().sendInformationDeviceToServer(OneSignalManager.getInstance().getOneSignalID(), DeviceManager.getInstance().getDeviceName(), DeviceManager.getInstance().getPlatform());
@@ -223,6 +266,73 @@ export class AppModuleProvider {
       this.mLoading.dismiss();
       this.mLoading = null;
     }
+  }
+
+  showToast(message: string, duration?: number, position?: string) {
+    this.mToastController
+      .create({
+        message: message,
+        duration: duration ? duration : 2000,
+        position: position ? position : "bottom"
+      })
+      .present();
+  }
+
+  public showModal(page, params?: any, callback?: any): void {
+    let modal = this.mModalController.create(page, params ? params : null);
+    modal.present();
+    modal.onDidDismiss(data => {
+      if (callback) {
+        callback(data);
+      }
+    });
+  }
+
+  public showParamsMessage(params) {
+    this.showToast(params.getUtfString(ParamsKey.MESSAGE));
+  }
+
+  public showAlertDisConnect() {
+    let alert = this.mAlertController.create();
+    alert.setTitle("Network error!");
+    alert.setMessage(
+      "Make sure that Wi-Fi or mobile data is turned on, then try again"
+    );
+    alert.addButton({
+      text: "Retry",
+      handler: () => {
+
+      }
+    });
+    alert.present();
+  }
+
+  public doSaveUserInfoIntoStorage(userInfo: UserInfo) {
+    // this.BookUserInfoInfo = userInfo;
+    return this.mStorageController.saveDataToStorage(
+      "book_user_info",
+      JSON.stringify(userInfo)
+    );
+  }
+
+  public showAlert(title: string, callback: any) {
+    let alert = this.mAlertController.create();
+    alert.setTitle(title);
+    alert.addButton({
+      text: "Cancel",
+      role: "cancel",
+      handler: () => {
+        callback(0);
+      }
+    });
+
+    alert.addButton({
+      text: "OK",
+      handler: () => {
+        callback(1);
+      }
+    });
+    alert.present();
   }
 
 }

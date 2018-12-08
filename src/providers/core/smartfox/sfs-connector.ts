@@ -125,6 +125,7 @@ export class SFSConnector extends Config {
                 return resolve();
             } else {
                 this.mSFSClient.disconnect();
+                this.onConnectionLost("");
                 resolve();
             }
         })
@@ -179,7 +180,7 @@ export class SFSConnector extends Config {
         if (this.mSFSClient != null && this.mSFSClient.isConnected) {
             this.mPingTimeOutID = setTimeout(() => {
                     this.send("book." +BookSFSCmd.PING, new SFS2X.SFSObject());
-            }, 5000);
+            }, 60000);
         }
     }
 }

@@ -4,7 +4,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { DeviceManager } from '../../providers/core/plugin/device-manager';
 import { AppModuleProvider } from '../../providers/app-module/app-module';
 import { APPKEYS } from '../../providers/app-module/app-keys';
-import { UserInfo, BookSFSConnector } from '../../providers/book-smartfox/book-connector';
+import { BookSFSConnector } from '../../providers/book-smartfox/book-connector';
+import { UserInfo } from '../../providers/bean/user-info';
 
 /**
  * Generated class for the LoadingPage page.
@@ -22,6 +23,8 @@ export class LoadingPage {
 
   isLoadDataClub: boolean = false;
   isLoadDataLeague: boolean = false;
+
+  userInfo: UserInfo = new UserInfo();
   constructor(
 
     public mSplashScreen: SplashScreen,
@@ -29,25 +32,24 @@ export class LoadingPage {
     public mAppModule: AppModuleProvider,
     public mAlertController: AlertController,
     public navCtrl: NavController, public navParams: NavParams
-  ) { }
+  ) {
+    this.onLoadParams();
+  }
 
 
   ionViewDidLoad() {
-    this.mPlatform.ready().then(() => {
-      this.onPlatformReady();
-    });
+    this.doLoadAppConfig();
+
   }
 
   ionViewWillUnload() {
     setTimeout(() => { this.mSplashScreen.hide(); }, 500);
   }
 
-  onPlatformReady() {
-    DeviceManager.getInstance().setInMobileDevice(!(this.mPlatform.is('core') || this.mPlatform.is('mobileweb')));
-    if (DeviceManager.getInstance().isInMobileDevice()) {
-      DeviceManager.getInstance().setPlatform(this.mPlatform.is("android") ? 1 : 2);
+  onLoadParams() {
+    if (this.navParams.data["params"]) {
+      this.userInfo = this.navParams.get("params");
     }
-    this.doLoadAppConfig();
   }
 
   doLoadAppConfig() {
@@ -60,35 +62,20 @@ export class LoadingPage {
 
 
 
-  doSwitchToTabsPage() {
+  doSwitchToMainPage() {
     this.navCtrl.setRoot("MainPage", {}, {
       animate: false,
     });
   }
 
-  doSwitchToBoardingPage() {
-    // this.navCtrl.setRoot("MainPage", {}, {
-    //   animate: false
-    // });
-  }
-
-
   onLoadConfigSucess() {
     this.mAppModule.getStoreController().getDataFromStorage(APPKEYS.USER_INFO).then((res) => {
       if (res) {
         let dataStorage = JSON.parse(res);
-        if (dataStorage.login_type == 4) {
-          this.doConnectToServer();
-        } else {
-          let userInfo: UserInfo = dataStorage;
-          this.doConnectToServer(userInfo);
-        }
-      } else {
-        this.doConnectToServer();
-        // this.doSwitchToBoardingPage();
+        this.userInfo.fromObject(dataStorage);
       }
+      this.doConnectToServer();
     });
-    // this.mAppModule.getHistoryKeysTemplate();
   }
 
   onLoadConfigFail() {
@@ -114,33 +101,30 @@ export class LoadingPage {
     });
   }
 
-  doConnectToServer(userInfo?: UserInfo) {
-    BookSFSConnector.getInstance().connect().then((res) => {     
-      if (userInfo) {
-        this.onConnectSucess(userInfo);
-      } else {
-        this.onGuestConnectSucess();
-      }
+  doConnectToServer() {
+    BookSFSConnector.getInstance().connect().then((res) => {
+      this.onConnectSucess();
     }).catch((err) => {
       this.onConnectError(err);
     });
   }
 
-  onConnectSucess(userinfo: UserInfo) {
-    // this.mAppModule.doLogin(userinfo).then((params) => {
-    //   this.onLoginSucess(params);
-    // }, error => {
-    //   this.doSwitchToBoardingPage();
-    // });
-  }
+  onConnectSucess() {
+    if (this.userInfo.getUsername().trim() != "" || this.userInfo.getPassword().trim() != "") {
+      this.mAppModule.doLogin(this.userInfo).then((params) => {
+        this.mAppModule.onLoginSuccess(params);
+        this.mAppModule.getStoreController().removeKeyDataFromStorage(APPKEYS.USER_INFO);
+        this.mAppModule.getStoreController().saveDataToStorage(APPKEYS.USER_INFO, JSON.stringify(this.userInfo));
+      }, error => {
+        this.onLogginError(error);
+      });
+    } else {
+      this.mAppModule.doLoginByGuest().then(params => {
+        this.mAppModule.onLoginSuccess(params);
 
-  onGuestConnectSucess() {
-    this.mAppModule.doLoginByGuest().then(params => {
-      this.mAppModule.onLoginSuccess(params);
-      this.doSwitchToTabsPage();
-    }, error => {
-      // this.doSwitchToBoardingPage();
-    });
+      })
+    }
+    this.doSwitchToMainPage();
   }
 
   onConnectError(err) {
@@ -161,6 +145,16 @@ export class LoadingPage {
     this.mAppModule.showLoadingNoduration().then(() => {
       this.onLoadConfigSucess();
     });
+  }
+
+  onLogginError(err) {
+    this.mAppModule.hideLoading();
+    let alert = this.mAppModule.getAlertController().create();
+    alert.setTitle("Thông báo");
+    alert.setSubTitle("Đăng nhập thất bại");
+    alert.setMessage("Sai tên đăng nhập hoặc mật khẩu");
+    alert.addButton("Ok");
+    alert.present();
   }
 
 }

@@ -1,14 +1,22 @@
 page-main {
+    ion-header{
+        background-color: rebeccapurple;
+    }
     ion-slides {
         max-width: 1440px;
     }
+    .m-logo {
+        height: 100px;
+        width: 300px;
+    }
     .cover1 {
-        max-width: 1440px;
-        height: 40vw;
+        background-image: url("./assets/imgs/logo1.png");
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
         position: relative;
+        width: 1440px;
+        height: 40vw;
     }
 
     .cover2 {
@@ -203,6 +211,54 @@ page-main {
             width: 150px;
         }
     }
+    .login-box {
+        border: 1px solid gray;
+        margin: 5px;
+        color: white;
+    }
+    .password-box {
+        border: 1px solid gray;
+        margin: 5px;
+        color: white;
+    }
+    .btn-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 16px;
+    }
+
+    .m-account {
+        display: flex;
+        float: right;
+        .user-input{
+            width: 150px;
+        }
+        .user-input {
+            width: 150px;
+        }
+    }
+    .m-user {
+        font-size: 2.5rem;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        color: white;
+        font-weight: bold;
+    }
+
+    .m-tabs {
+        display: flex;
+        font-size: 2rem;
+        color: rgba($color: white, $alpha: .5);
+        .item {
+            padding: 10px;
+        }
+        .menu-selected {
+            color: white
+        }
+    }
+
     
 }
 

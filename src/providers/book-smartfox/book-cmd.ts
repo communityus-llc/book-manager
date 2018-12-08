@@ -23,4 +23,21 @@ export class BookSFSCmd {
     public static USER_ORDER_LIST: string = "user_order_list";
     public static USER_GET_LIST_POST: string = "user_get_list_post";
     public static USER_UP_POST_FEED: string = "user_up_post_feed";
+
+
+    public static 	USER_GET_LIST_BOOK				:string = "user_get_list_book";
+    public static 	USER_UPDATE_BOOK				:string = "user_update_book";
+    public static 	USER_ADD_BOOK					:string = "user_add_book";
+    public static 	USER_DELETE_BOOK				:string = "user_delete_book";
+    
+    public static 	USER_GET_LIST_NEW				:string = "user_get_list_new";
+    public static 	USER_UPDATE_NEW					:string = "user_update_new";
+    public static 	USER_ADD_NEW					:string = "user_add_new";
+    public static 	USER_DELETE_NEW					:string = "user_delete_new";
+    
+    public static 	USER_GET_LIST_ORDER				:string = "user_get_list_order";
+    public static 	USER_UPDATE_ORDER				:string = "user_update_order";
+    public static 	USER_ADD_ORDER					:string = "user_add_order";
+    public static 	USER_DELETE_ORDER				:string = "user_delete_order";
+
 }

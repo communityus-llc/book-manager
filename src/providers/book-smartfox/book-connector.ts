@@ -1,11 +1,15 @@
 import { SFSConnector } from "../core/smartfox/sfs-connector";
-import { PLATFORM, LOGIN_TYPE } from "../app-module/app-constants";
-import { OneSignalManager } from "../core/plugin/onesignal-manager";
+import { LOGIN_TYPE } from "../app-module/app-constants";
 import { ParamsKey } from "../app-module/paramskeys";
 import md5 from 'md5';
 import moment from 'moment';
 import { SFSEvent } from "../core/smartfox/sfs-events";
 import { BookSFSCmd } from "./book-cmd";
+import { DeviceInfo } from "../bean/device-info";
+import { UserInfo } from "../bean/user-info";
+import { NewsBean } from "../bean/NewsBean";
+import { BookBean } from "../bean/BookBean";
+import { OrderBean } from "../bean/OrderBean";
 
 var SFS2X = window['SFS2X'];
 
@@ -43,69 +47,6 @@ export class SFSUser {
 export class Listener {
     name: string = "";
     method: any = () => { };
-}
-
-export class DeviceInfo {
-    platform: number = PLATFORM.WEB;
-    name: string = "web";
-    onesignal_id: string = OneSignalManager.getInstance().getOneSignalID();
-
-    constructor() {
-    }
-
-    fromObject(data) {
-        if (data) {
-            if ("platform" in data) this.platform = data.platform;
-            if ("name" in data) this.name = data.name;
-            if ("onesignal_id" in data) this.onesignal_id = data.onesignal_id;
-        }
-    }
-
-    toSFSObject(obj) {
-        obj.putInt(ParamsKey.PLATFORM, this.platform);
-        obj.putUtfString(ParamsKey.NAME, this.name);
-        obj.putUtfString(ParamsKey.ONESIGNAL_ID, this.onesignal_id);
-        return obj;
-    }
-
-}
-
-export class UserInfo {
-    phone: string = "";
-    facebook_id: string = "";
-    username: string = "";
-    password: string = "";
-
-    constructor() {
-
-    }
-
-    fromObject(data) {
-        if (data) {
-            if ("phone" in data) this.phone = data.phone;
-            if ("facebook_id" in data) this.facebook_id = data.facebook_id;
-            if ("username" in data) this.username = data.username;
-            if ("password" in data) this.password = data.password;
-        }
-    }
-
-    toSFSObject(sfsobject, type) {
-        if (type == LOGIN_TYPE.DEVICE) {
-            return sfsobject;
-        } else if (type == LOGIN_TYPE.PHONE) {
-            sfsobject.putUtfString(ParamsKey.PHONE, this.phone);
-            return sfsobject;
-        } else if (type == LOGIN_TYPE.FACEBOOK) {
-            sfsobject.putUtfString(ParamsKey.FACEBOOK_ID, this.facebook_id);
-            return sfsobject;
-        } else if (type == LOGIN_TYPE.USERNAME_PASSWORD) {
-            sfsobject.putUtfString(ParamsKey.USERNAME, this.username);
-            sfsobject.putUtfString(ParamsKey.PASSWORD, md5(this.password));
-            return sfsobject;
-        } else {
-            return sfsobject;
-        }
-    }
 }
 
 export class BookSFSConnector extends SFSConnector {
@@ -172,7 +113,7 @@ export class BookSFSConnector extends SFSConnector {
         }
     }
 
-    public login(login_type: number, device_info: DeviceInfo, userinfo: UserInfo) {
+    public login(deviceInfo: DeviceInfo, userInfo: UserInfo) {
         if (SFS2X == null || SFS2X == undefined) {
             SFS2X = window['SFS2X'];
         }
@@ -190,27 +131,31 @@ export class BookSFSConnector extends SFSConnector {
             console.log("login 1");
 
             let params = new SFS2X.SFSObject();
+
+            let today = moment(new Date()).format('YYYY-MM-DD');
+            let sign = md5(today + deviceInfo.getOnesignalID());
+            params.putUtfString(ParamsKey.SIGN, sign);
+
+            params.putInt(ParamsKey.LOGIN_TYPE, 3);
+
             let userInfoSFSObject = new SFS2X.SFSObject();
             let deviceInfoSFSObject = new SFS2X.SFSObject();
-            let today = moment(new Date()).format('YYYY-MM-DD');
-            let sign = md5(today + device_info.onesignal_id);
-            params.putInt(ParamsKey.LOGIN_TYPE, login_type);
-            params.putSFSObject(ParamsKey.DEVICE_INFO, device_info.toSFSObject(deviceInfoSFSObject));
-            params.putUtfString(ParamsKey.SIGN, sign);
-            params.putSFSObject(ParamsKey.USER_INFO, userinfo.toSFSObject(userInfoSFSObject, login_type));
 
-            if (this.mDebug) {
-                console.log("params..", params.getDump());
-            }
+            params.putSFSObject(ParamsKey.DEVICE_INFO, deviceInfo.toSFSObject(deviceInfoSFSObject));
+
+            params.putSFSObject(ParamsKey.USER_INFO, userInfo.toSFSObject(userInfoSFSObject));
+
+            console.log("dum", params.getDump());
+
             this.mSFSClient.send(new SFS2X.LoginRequest("", "", params, this.getSFSZone()));
         });
 
     }
 
-    public loadingByGuest(device_info: DeviceInfo){
+    public loadingByGuest(deviceInfo: DeviceInfo) {
         if (SFS2X == null || SFS2X == undefined) {
             SFS2X = window['SFS2X'];
-        }  
+        }
         return new Promise((resolve, reject) => {
             this.mSFSClient.removeEventListener(SFSEvent.LOGIN, () => { });
             this.mSFSClient.removeEventListener(SFSEvent.LOGIN_ERROR, () => { });
@@ -220,20 +165,19 @@ export class BookSFSConnector extends SFSConnector {
             this.mSFSClient.addEventListener(SFSEvent.LOGIN_ERROR, (eventParams) => {
                 return reject(eventParams);
             });
+
+            console.log("login 2");
+
             let params = new SFS2X.SFSObject();
 
             let today = moment(new Date()).format("YYYY-MM-DD");
-            let sign = md5(today + device_info.onesignal_id);
-           
+            let sign = md5(today + deviceInfo.getOnesignalID());
+
             params.putInt(ParamsKey.LOGIN_TYPE, LOGIN_TYPE.DEVICE);
             params.putUtfString(ParamsKey.ONESIGNAL_ID, sign);
-            params.putUtfString(ParamsKey.DEVICE_NAME, device_info.name);
-
-            console.log("params..", params.getDump());
+            params.putUtfString(ParamsKey.DEVICE_NAME, deviceInfo.getName());
 
             this.mSFSClient.send(new SFS2X.LoginRequest("", "", params, this.getSFSZone()));
-            
-
         })
     }
 
@@ -279,6 +223,21 @@ export class BookSFSConnector extends SFSConnector {
         });
     }
 
+    requestJoinRoom(roomName: string) {
+        this.mSFSUserRoom = roomName;
+        return new Promise((resolve, reject) => {
+            this.mSFSClient.removeEventListener(SFSEvent.ROOM_JOIN, () => { });
+            this.mSFSClient.removeEventListener(SFSEvent.ROOM_JOIN_ERROR, () => { });
+            this.mSFSClient.addEventListener(SFSEvent.ROOM_JOIN, (eventParams) => {
+                return resolve(eventParams);
+            });
+            this.mSFSClient.addEventListener(SFSEvent.ROOM_JOIN_ERROR, (eventParams) => {
+                return reject(eventParams);
+            });
+            this.mSFSClient.send(new SFS2X.JoinRoomRequest(roomName));
+        });
+    }
+
     public onExtensionResponse(eventParams) {
         if (this.mDebug) {
             console.log("EXTENSION_RESPONSE : " + eventParams.cmd, eventParams.params.getDump());
@@ -295,4 +254,91 @@ export class BookSFSConnector extends SFSConnector {
         }
         this.send(this.mBook + BookSFSCmd.LOGIN, params);
     }
+
+    public sendRequestUSER_GET_LIST_BOOK() {
+        let params = new SFS2X.SFSObject();
+
+
+        this.send(this.mBook + BookSFSCmd.USER_GET_LIST_BOOK, params);
+    }
+
+    public sendRequestUSER_UPDATE_BOOK(book: BookBean) {
+        let params = new SFS2X.SFSObject();
+        params = book.toSFSObject(params);
+
+        this.send(this.mBook + BookSFSCmd.USER_UPDATE_BOOK, params);
+    }
+
+    public sendRequestUSER_ADD_BOOK(book: BookBean) {
+        let params = new SFS2X.SFSObject();
+        params = book.toSFSObject(params);
+
+        this.send(this.mBook + BookSFSCmd.USER_ADD_BOOK, params);
+    }
+
+    public sendRequestUSER_DELETE_BOOK(bookID: number) {
+        let params = new SFS2X.SFSObject();
+        params.putInt(ParamsKey.BOOK_ID, bookID);
+
+        this.send(this.mBook + BookSFSCmd.USER_DELETE_BOOK, params);
+    }
+
+
+    public sendRequestUSER_GET_LIST_NEW() {
+        let params = new SFS2X.SFSObject();
+
+
+        this.send(this.mBook + BookSFSCmd.USER_GET_LIST_NEW, params);
+    }
+
+    public sendRequestUSER_UPDATE_NEW(news: NewsBean) {
+        let params = new SFS2X.SFSObject();
+        params = news.toSFSObject(params);
+
+        this.send(this.mBook + BookSFSCmd.USER_UPDATE_NEW, params);
+    }
+
+    public sendRequestUSER_ADD_NEW(news: NewsBean) {
+        let params = new SFS2X.SFSObject();
+        params = news.toSFSObject(params);
+
+        this.send(this.mBook + BookSFSCmd.USER_ADD_NEW, params);
+    }
+
+    public sendRequestUSER_DELETE_NEW(newID: number) {
+        let params = new SFS2X.SFSObject();
+        params.putInt(ParamsKey.NEW_ID, newID);
+
+        this.send(this.mBook + BookSFSCmd.USER_DELETE_NEW, params);
+    }
+
+
+    public sendRequestUSER_GET_LIST_ORDER() {
+        let params = new SFS2X.SFSObject();
+
+
+        this.send(this.mBook + BookSFSCmd.USER_GET_LIST_ORDER, params);
+    }
+
+    public sendRequestUSER_UPDATE_ORDER(order: OrderBean) {
+        let params = new SFS2X.SFSObject();
+        params = order.toSFSObject(params);
+
+        this.send(this.mBook + BookSFSCmd.USER_UPDATE_ORDER, params);
+    }
+
+    public sendRequestUSER_ADD_ORDER(order: OrderBean) {
+        let params = new SFS2X.SFSObject();
+        params = order.toSFSObject(params);
+
+        this.send(this.mBook + BookSFSCmd.USER_ADD_ORDER, params);
+    }
+
+    public sendRequestUSER_DELETE_ORDER(orderID: number) {
+        let params = new SFS2X.SFSObject();
+        params.putInt(ParamsKey.ORDER_ID, orderID);
+
+        this.send(this.mBook + BookSFSCmd.USER_DELETE_ORDER, params);
+    }
+
 }

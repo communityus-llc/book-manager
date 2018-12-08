@@ -122,19 +122,19 @@
     ],
     "titleText": [
         {
-            "id": 1,
+            "id": 0,
             "title": "Book-TMT",
             "sub_title": "Việc đọc rất quan trọng. Nếu bạn biết cách đọc, cả thế giới sẽ mở ra cho bạn. Barack Obama",
             "thumbnail": "./assets/imgs/book1.jpg"
         },
         {
-            "id": 2,
+            "id": 1,
             "title": "Book-TMT",
             "sub_title": "Bạn càng đọc nhiều, bạn càng biết nhiều. Bạn càng học nhiều, bạn càng đi nhiều. Dr Seuss",
             "thumbnail": "./assets/imgs/book1.jpg"
         },
         {
-            "id": 3,
+            "id": 2,
             "title": "Book-TMT",
             "sub_title": "",
             "thumbnail": "./assets/imgs/book1.jpg"
