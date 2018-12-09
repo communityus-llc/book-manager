@@ -5,12 +5,13 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <div class="flex space-between">
+  <div padding-left class="flex space-between">
     <div>
       <div style="font-size: 3rem">{{"BOOKSTORE.COM"}}</div>
 
       <div class="m-tabs">
-        <div class="item" *ngFor="let item of listMenu" [class.menu-selected]="item.id==menuSelected" (click)="onClickMenu(item)">{{item.name}}</div>
+        <div class="item" *ngFor="let item of listMenu; let i = index" [class.menu-selected]="item.id==menuSelected"
+          (click)="onClickMenu(item)" [class.hidden-shop]="i==4 && mUser.role==2" tappable>{{item.name}}</div>
       </div>
 
     </div>
@@ -22,17 +23,18 @@
           <ion-input class="user-input" placeholder="Tên Đăng Nhập" type="text" [(ngModel)]="username"></ion-input>
         </div>
         <div class="password-box">
-          <ion-input class="user-input" placeholder="Mật Khẩu" type="password" [(ngModel)]="password" (keyup.enter)="onClickLogin()"></ion-input>
+          <ion-input class="user-input" placeholder="Mật Khẩu" type="password" [(ngModel)]="password" (keyup.enter)="onClickLogin()"
+            tappable></ion-input>
         </div>
         <div class="btn-box">
-          <button ion-button (click)="onClickLogin()">Đăng nhập</button>
+          <button ion-button (click)="onClickLogin()" tappable>Đăng nhập</button>
         </div>
       </div>
 
       <div class="m-account" [hidden]="mUser.loginType!=3" *ngIf="mUser">
         <div class="m-user"> {{mUser.name}} </div>
         <div class="btn-box">
-          <button ion-button (click)="onClickLogout()">Đăng xuất</button>
+          <button ion-button (click)="onClickLogout()" tappable>Đăng xuất</button>
         </div>
       </div>
     </div>
@@ -43,6 +45,7 @@
 
 <ion-content>
   <div [hidden]="menuSelected!=0">
+    <div padding-top></div>
     <ion-grid no-padding style="align-items: center">
       <ion-slides (ionSlideDidChange)="slideChanged($event)" autoplay="3000">
         <ion-slide *ngFor="let item of listTitle">
@@ -55,40 +58,37 @@
         </ion-slide>
       </ion-slides>
       <div class="m-dots">
-        <div class="m-dot" *ngFor="let item of listTitle" [class.clicked]="item.id==selected" (click)="onClickDot(item)">
+        <div class="m-dot" *ngFor="let item of listTitle" [class.clicked]="item.id==selected" (click)="onClickDot(item)"
+          tappable>
         </div>
       </div>
       <ion-row class="m-book">
-        <ion-col col-3 *ngFor="let item of listBook">
+        <ion-col col-3 *ngFor="let item of listBooksHome" (click)="onClickBookInHome(item)">
           <div class="book-item">
-            <div class="thumbnail-item" [ngStyle]="{'background-image':'url('+item.thumbnail+')'}"></div>
+            <div class="thumbnail-item" [ngStyle]="{'background-image':item.thumbnail.length > 1 ? 'url('+item.thumbnail+')' : 'url(./assets/imgs/book3.jpg)'}"></div>
             <div class="name-item">
               <div>{{item.name}}</div>
             </div>
           </div>
         </ion-col>
       </ion-row>
-
+      <div padding-top></div>
       <ion-row class="cover2" [ngStyle]="{'background-image':'url(./assets/imgs/book2.jpg)'}">
         <div class="m-about">
           <div class="m-about-title">Về chúng tôi</div>
-          <div class="m-about-sub"> Website của chúng tôi đem đến cho bạn nhiều sự lựa chọn với nhiều loại thể loại
-            sách
-            khác nhau: Khoa Học, Văn Học, Sách Giáo Khoa, Anh Ngữ và nhiều thể loại sách khác. Các bạn có thể đến trực
-            tiếp cửa hàng hoặc mua hàng qua website, rất mong muốn được phục vụ các bạn.
-          </div>
+          <div class="m-about-sub">{{aboutUs}}</div>
         </div>
       </ion-row>
 
 
       <div class="m-new-title">
         <div class="new-title">Bản tin gần đây</div>
-        <div class="see-more" (click)="onClickSeeMore()">Xem thêm</div>
+        <div class="see-more" (click)="onClickSeeMore()" tappable>Xem thêm</div>
       </div>
       <ion-row class="m-new">
-        <ion-col col-4 *ngFor="let item of listNew; let i = index">
+        <ion-col col-4 *ngFor="let item of listNewsHome; let i = index" (click)="onClickNewInHome(item)">
           <div [class.col-left]="i==0" [class.col-right]="i==2" [class.col-mid]="i==1">
-            <div class="new-pic" [ngStyle]="{'background-image':'url('+item.thumbnail+')'}"></div>
+            <div class="new-pic" [ngStyle]="{'background-image':item.thumbnail.length > 1 ? 'url('+item.thumbnail+')' : 'url(./assets/imgs/book3.jpg)'}"></div>
             <div class="new-item-title">{{item.title}}</div>
             <div class="new-item-des">{{item.description}}</div>
           </div>
@@ -115,32 +115,114 @@
 
   <div [hidden]="menuSelected!=1" class="center">
     <div class="width-web">
-      <div class="center large-font">Danh sách đơn hàng</div>
+      <div padding-top class="center large-font">Danh sách đơn hàng</div>
       <div>
-        <div *ngFor="let item of listOrders" (click)="onClickOrder(item)">{{item.userName}}</div>
+        <div *ngFor="let item of listOrders" (click)="onClickOrder(item)" tappable>
+          <div class="bg-white" padding margin-top>
+            <div class="large-font bold">{{item.userName}}</div>
+            <div class="semi-font sub-string">{{item.timeCreated | timeToString}}</div>
+            <div padding-top class="large-font color-green bold">{{item.money | number}}</div>
+            <div padding-top class="normal-font">{{item.state | orderType}}</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <div [hidden]="menuSelected!=2" class="center">
     <div class="width-web">
-      <div class="center large-font">Tủ sách của chúng tôi</div>
+      <div class="space-between large-font">
+        <div padding-top>Tủ sách của chúng tôi</div>
+        <div [hidden]="mUser.role!=2">
+          <button ion-button (click)="onClickAddBook()" tappable>Thêm mới</button>
+        </div>
+        <div [hidden]="mUser.role!=1">
+          <button ion-button (click)="onClickGoToShop()" tappable>Đến giỏ hàng</button>
+        </div>
+      </div>
       <ion-row>
-        <ion-col col-4 *ngFor="let item of listBooks">{{item.name}}</ion-col>
+        <ion-col col-4 *ngFor="let item of listBooks">
+          <div class="bg-white" padding>
+            <div (click)="onClickBook(item)" tappable>
+              <img [src]="item.thumbnail || './assets/imgs/book3.jpg'">
+            </div>
+            <div class="space-between">
+              <div (click)="onClickBook(item)" tappable>
+                <div class="big-font">{{item.name}}</div>
+                <div class="large-font color-green bold">{{item.price | number}}VND</div>
+              </div>
+              <div [hidden]="mUser.role!=1">
+                <div class="flex big-font" [hidden]="item.state<=0">
+                  <ion-icon padding name="md-remove" (click)="onMinus(item)"></ion-icon>
+                  <span padding>{{item.state}}</span>
+                  <ion-icon padding name="md-add" (click)="onAdd(item)"></ion-icon>
+                </div>
+                <div [hidden]="item.state>0">
+                  <button ion-button (click)="onBuy(item)">Mua</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ion-col>
       </ion-row>
     </div>
   </div>
 
   <div [hidden]="menuSelected!=3" class="center">
     <div class="width-web">
-      <div class="center large-font">Tin tức</div>
+      <div class="space-between large-font">
+        <div padding-top>
+          Tin tức
+        </div>
+        <div>
+          <button ion-button (click)="onClickAddNew()" tappable>Thêm mới</button>
+        </div>
+      </div>
       <ion-row>
-        <ion-col col-4 *ngFor="let item of listNews">
-          <div>
+        <ion-col col-4 *ngFor="let item of listNews" (click)="onClickNew(item)" tappable>
+          <div class="bg-white" padding>
+            <div>
+              <img [src]="item.thumbnail || './assets/imgs/book1.jpg'">
+            </div>
             <div class="big-font">{{item.title}}</div>
+            <div class="sub-title sub-string">{{item.timeCreated | timeToString}}</div>
             <div padding-top class="semi-font">{{item.description}}</div>
           </div>
         </ion-col>
+      </ion-row>
+    </div>
+  </div>
+
+  <div [hidden]="menuSelected!=4" class="center">
+    <div class="width-web">
+      <div class="space-between large-font">
+        <div padding-top>
+          Giỏ hàng của bạn
+        </div>
+        <div>
+          <button ion-button (click)="onClickAddOrder()" tappable>Tạo đơn hàng</button>
+        </div>
+      </div>
+      <ion-row style="font-size: 2rem">
+        <ion-col col-4>Tên sách</ion-col>
+        <ion-col col-4>Số lượng</ion-col>
+        <ion-col col-4>Thành tiền</ion-col>
+      </ion-row>
+      <ion-row padding-top style="font-size: 2rem" *ngFor="let item of listBooksOrder">
+        <ion-col col-4>{{item.name}}</ion-col>
+        <ion-col col-4>
+          <div class="flex big-font" [hidden]="item.state<=0">
+            <ion-icon padding name="md-remove" (click)="onMinus(item)"></ion-icon>
+            <span padding>{{item.state}}</span>
+            <ion-icon padding name="md-add" (click)="onAdd(item)"></ion-icon>
+          </div>
+        </ion-col>
+        <ion-col col-4>{{item.price * item.state | number}}VND</ion-col>
+      </ion-row>
+      <ion-row style="font-size: 2rem">
+        <ion-col col-4></ion-col>
+        <ion-col col-4 class="bold">Tổng tiền</ion-col>
+        <ion-col col-4 class="bold color-green">{{totalOrder | number}}</ion-col>
       </ion-row>
     </div>
   </div>

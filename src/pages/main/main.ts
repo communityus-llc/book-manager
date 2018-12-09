@@ -1,10 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Slides, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Slides, AlertController, Content } from 'ionic-angular';
 import { AppModuleProvider } from '../../providers/app-module/app-module';
 import { BookSFSConnector } from '../../providers/book-smartfox/book-connector';
 import { BookBaseExtension } from '../../providers/book-smartfox/book-base-extensions';
 import { BookSFSCmd } from '../../providers/book-smartfox/book-cmd';
-import { LOGIN_TYPE } from '../../providers/app-module/app-constants';
+import { LOGIN_TYPE, BUTTON_TYPE } from '../../providers/app-module/app-constants';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { UserInfo } from '../../providers/bean/user-info';
 import { APPKEYS } from '../../providers/app-module/app-keys';
@@ -27,8 +27,9 @@ import { OrderBean } from '../../providers/bean/OrderBean';
 })
 export class MainPage {
   @ViewChild(Slides) slides: Slides;
+  @ViewChild(Content) myContent: Content;
 
-  listNew: any;
+
   listTitle: any;
   mContact: any;
 
@@ -41,17 +42,17 @@ export class MainPage {
 
   mUser: UserBean;
 
-  listBook: Array<any> = [
-    { id: 1, name: "Đi tìm lẽ sống", description: "Đi tìm lẽ sống đơn giản là đi tìm cách sống", thumbnail: "./assets/imgs/book3.jpg" },
-    { id: 2, name: "Đi tìm lẽ sống", description: "Đi tìm lẽ sống đơn giản là đi tìm cách sống", thumbnail: "./assets/imgs/book3.jpg" },
-    { id: 3, name: "Đi tìm lẽ sống", description: "Đi tìm lẽ sống đơn giản là đi tìm cách sống", thumbnail: "./assets/imgs/book3.jpg" },
-    { id: 4, name: "Đi tìm lẽ sống", description: "Đi tìm lẽ sống đơn giản là đi tìm cách sống", thumbnail: "./assets/imgs/book3.jpg" },
-  ]
+  aboutUs = "Website của chúng tôi đem đến cho bạn nhiều sự lựa chọn với nhiều loại thể loại sách khác nhau: Khoa Học, Văn Học, Sách Giáo Khoa, Anh Ngữ và nhiều thể loại sách khác. Các bạn có thể đến trực tiếp cửa hàng hoặc mua hàng qua website, rất mong muốn được phục vụ các bạn."
 
 
   listBooks: Array<BookBean> = [];
   listNews: Array<NewsBean> = [];
   listOrders: Array<OrderBean> = [];
+
+  listBooksHome: Array<BookBean> = [];
+  listNewsHome: Array<NewsBean> = [];
+
+  listBooksOrder: Array<BookBean> = [];
 
 
   menuSelected: number = 0;
@@ -59,7 +60,8 @@ export class MainPage {
     { id: 0, name: "Trang chủ" },
     { id: 1, name: "Đơn hàng" },
     { id: 2, name: "Danh mục sách" },
-    { id: 3, name: "Bản tin" }
+    { id: 3, name: "Bản tin" },
+    { id: 4, name: "Giỏ hàng" }
   ]
 
   selected: number = 0;
@@ -78,7 +80,6 @@ export class MainPage {
   onLoadConfig() {
     this.mAppModule._LoadAppConfig().then(() => {
       this.listTitle = this.mAppModule.getAppConfig().get("titleText")
-      this.listNew = this.mAppModule.getAppConfig().get("listNews");
       this.mContact = this.mAppModule.getAppConfig().get("contact");
     })
   }
@@ -86,8 +87,24 @@ export class MainPage {
   onLoadData() {
     BookSFSConnector.getInstance().sendRequestUSER_GET_LIST_BOOK();
     BookSFSConnector.getInstance().sendRequestUSER_GET_LIST_NEW();
-    BookSFSConnector.getInstance().sendRequestUSER_GET_LIST_ORDER();
+    if (this.mUser && this.mUser.getRole() == 2) {
+      BookSFSConnector.getInstance().sendRequestUSER_GET_LIST_ORDER();
+    } else if (this.mUser && this.mUser.getRole() == 1) {
+      BookSFSConnector.getInstance().sendRequestUSER_GET_LIST_ORDER(this.mUser.getUserID());
+    }
 
+  }
+
+  onLoadFourBook() {
+    for (let i = 0; i < 4; i++) {
+      this.listBooksHome.push(this.listBooks[i]);
+    }
+  }
+
+  onLoadThreeNew() {
+    for (let i = 0; i < 3; i++) {
+      this.listNewsHome.push(this.listNews[i]);
+    }
   }
 
   ionViewDidLoad() {
@@ -110,6 +127,10 @@ export class MainPage {
     BookSFSConnector.getInstance().removeListener("MainPage");
   }
 
+  ionViewDidEnter() {
+    this.slides.startAutoplay();
+  }
+
 
   onExtensionResponse(response) {
     let cmd = response.cmd;
@@ -125,6 +146,9 @@ export class MainPage {
       else if (cmd == BookSFSCmd.USER_GET_LIST_ORDER) {
         this.onExtensionUSER_GET_LIST_ORDER(data);
       }
+      else if (cmd == BookSFSCmd.USER_ADD_ORDER) {
+        this.onExtensionUSER_ADD_ORDER(data);
+      }
     } else {
       this.mAppModule.showParamsMessage(params);
     }
@@ -133,8 +157,11 @@ export class MainPage {
   onExtensionUSER_GET_LIST_BOOK(data) {
     if (data) {
       console.log(data);
-
+      data.sort((b, a) => {
+        return a.getTimeCreated() - b.getTimeCreated();
+      });
       this.listBooks = data;
+      this.onLoadFourBook();
     }
 
   }
@@ -142,16 +169,30 @@ export class MainPage {
   onExtensionUSER_GET_LIST_NEW(data) {
     if (data) {
       console.log(data);
-
+      data.sort((b, a) => {
+        return a.getTimeCreated() - b.getTimeCreated();
+      });
       this.listNews = data;
+      this.onLoadThreeNew();
     }
   }
 
   onExtensionUSER_GET_LIST_ORDER(data) {
     if (data) {
       console.log(data);
-
+      data.sort((b, a) => {
+        return a.getTimeCreated() - b.getTimeCreated();
+      });
       this.listOrders = data;
+    }
+  }
+
+  onExtensionUSER_ADD_ORDER(data) {
+    if (data) {
+      console.log(data);
+      this.listOrders.unshift(data);
+
+      this.mAppModule.showToast("Tạo đơn hàng thành công")
     }
   }
 
@@ -166,7 +207,8 @@ export class MainPage {
   }
 
   onClickSeeMore() {
-    this.navCtrl.push("ListbookPage");
+    this.myContent.scrollToTop(200);
+    this.menuSelected = 3;
   }
 
   onClickLogin() {
@@ -193,5 +235,150 @@ export class MainPage {
 
   onClickOrder(item: OrderBean) {
     this.mAppModule.showModal("ModalOrderPage", { params: item });
+  }
+
+
+  onClickNew(item: NewsBean) {
+    if (this.mUser.getRole() == 2) {
+      this.mAppModule.showModal("ModalNewPage", { params: item }, res => {
+        if (res) {
+          if (res.type == BUTTON_TYPE.DELETE) {
+            let index = this.listNews.findIndex(item => {
+              return item.getNewID() == res.data.getNewID();
+            });
+
+            if (index > -1) {
+              this.listNews.splice(index, 1);
+            }
+          }
+        }
+      });
+    }
+    else if (this.mUser.getRole() == 1) {
+      this.navCtrl.push("NewDetailPage", { params: item });
+    }
+  }
+
+  onClickAddNew() {
+    this.mAppModule.showModal("ModalAddNewPage", null, res => {
+      if (res) {
+        if (res.type == BUTTON_TYPE.SAVE) {
+          this.listNews.unshift(res.data);
+        }
+      }
+    });
+  }
+
+
+  onClickBook(item: BookBean) {
+    if (this.mUser.getRole() == 2) {
+      this.mAppModule.showModal("ModalBookPage", { params: item }, res => {
+        if (res) {
+          if (res.type == BUTTON_TYPE.DELETE) {
+            let index = this.listBooks.findIndex(item => {
+              return item.getBookID() == res.data.getBookID();
+            });
+            if (index > -1) {
+              this.listBooks.splice(index, 1);
+            }
+          }
+        }
+      });
+    }
+    else {
+      this.navCtrl.push("BookDetailPage", { params: item });
+    }
+  }
+
+  onClickAddBook() {
+    this.mAppModule.showModal("ModalAddBookPage", null, res => {
+      if (res) {
+        if (res.type == BUTTON_TYPE.SAVE) {
+          this.listBooks.unshift(res.data);
+        }
+      }
+    });
+  }
+
+  onClickGoToShop() {
+    this.myContent.scrollToTop(200);
+    this.menuSelected = 4;
+  }
+
+  totalOrder: number = 0;
+  onCaculateTotal() {
+    this.totalOrder = 0;
+    this.listBooksOrder.forEach(item => {
+      this.totalOrder = this.totalOrder + (item.getPrice() * item.getState());
+    });
+  }
+
+  onClickAddOrder() {
+    this.mAppModule.showAlert("Bạn có chắc muốn tạo đơn hàng này?", res => {
+      if (res == 1) {
+        let order = new OrderBean();
+        order.setUserID(this.mUser.getUserID());
+        order.setUserName(this.mUser.getName());
+        order.setMoney(this.totalOrder);
+
+        BookSFSConnector.getInstance().sendRequestUSER_ADD_ORDER(order);
+      }
+    })
+
+  }
+
+
+
+
+  onClickNewInHome(item: NewsBean) {
+    this.navCtrl.push("NewDetailPage", { params: item });
+  }
+
+  onClickBookInHome(item: BookBean) {
+    this.navCtrl.push("BookDetailPage", { params: item });
+  }
+
+  onAdd(item: BookBean) {
+    if (item.getState() < 1) {
+      item.setState(1);
+    } else {
+      let index = item.getState() + 1;
+      item.setState(index);
+    }
+
+    if (this.listBooksOrder.length > 0) {
+      let index = this.listBooksOrder.findIndex(book => {
+        return book.getBookID() == item.getBookID();
+      });
+      if (index == -1) {
+        this.listBooksOrder.push(item);
+      }
+    }
+    this.onCaculateTotal();
+  }
+
+  onMinus(item: BookBean) {
+    if (item.getState() < 1) {
+      item.setState(0);
+    } else {
+      let index = item.getState() - 1;
+      item.setState(index);
+    }
+
+    if (this.listBooksOrder.length > 0) {
+      let index = this.listBooksOrder.findIndex(book => {
+        return book.getBookID() == item.getBookID();
+      });
+      if (item.getState() <= 0) {
+        this.listBooksOrder.splice(index, 1);
+      }
+    }
+    this.onCaculateTotal();
+  }
+
+  onBuy(item: BookBean) {
+    item.setState(1);
+    this.listBooksOrder.push(item);
+    this.onCaculateTotal();
   }
 }

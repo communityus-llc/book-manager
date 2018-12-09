@@ -42,10 +42,10 @@
     <div padding-right>
       <button ion-button (click)="onClickCancelOrder()">Hủy đơn hàng</button>
     </div>
-    <div>
+    <div [hidden]="mUser.role!=2">
       <button ion-button (click)="onClickConfirmOrder()">Xác nhận</button>
     </div>
-    <div padding-left>
+    <div padding-left [hidden]="mUser.role!=2">
       <button ion-button (click)="onClickCompleteOrder()">Hoàn thành</button>
     </div>
   </div>

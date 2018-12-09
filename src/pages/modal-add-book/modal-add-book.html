@@ -1,0 +1,41 @@
+<!--
+  Generated template for the ModalAddBookPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-toolbar>
+    <ion-title>Thêm mới sách</ion-title>
+    <ion-buttons right navPop>
+      <button ion-button icon-only>
+        <ion-icon name="md-close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label stacked>Tên sách</ion-label>
+      <ion-input [(ngModel)]="mBooks.name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label stacked>Giá</ion-label>
+      <ion-input [(ngModel)]="mBooks.price"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label stacked>Mô tả</ion-label>
+      <ion-textarea rows="2" [(ngModel)]="mBooks.description"></ion-textarea>
+    </ion-item>
+  </ion-list>
+  <div class="center">
+    <div>
+      <button ion-button (click)="onClickSaveBook()">Lưu</button>
+    </div>
+  </div>
+</ion-content>

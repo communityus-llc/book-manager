@@ -17,7 +17,7 @@ export class BookBean {
 	public toSFSObject(obj): any {
 		
 		obj.putInt(ParamsKey.BOOK_ID, this.getBookID());
-		obj.putInt(ParamsKey.PRICE, this.getPrice());
+		obj.putInt(ParamsKey.PRICE, Number(this.getPrice()));
 		obj.putInt(ParamsKey.STATE, this.getState());
 		obj.putInt(ParamsKey.TYPE, this.getType());
 		obj.putLong(ParamsKey.TIME_CREATED, this.getTimeCreated());

@@ -222,6 +222,10 @@ export class AppModuleProvider {
       if (userdata.getInt(ParamsKey.LOGIN_TYPE) == 3) {
         this.showToast("Đăng nhập thành công", 2000, "top");
       }
+
+      if (userdata.getInt(ParamsKey.LOGIN_TYPE) == 4) {
+        this.showToast("Chế độ khách", 2000, "top");
+      }
       let sfsUserData = userdata.getSFSObject(ParamsKey.CONTENT);
       this.mUser.fromSFSObject(sfsUserData);
       console.log(this.mUser);

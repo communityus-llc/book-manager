@@ -1,0 +1,41 @@
+<!--
+  Generated template for the NewDetailPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <div class="flex space-between">
+    <div padding-left>
+      <div style="font-size: 3rem" navPop>{{"BOOKSTORE.COM"}}</div>
+
+      <div class="m-tabs">
+        <div class="item">Bản tin</div>
+      </div>
+
+    </div>
+
+    <div>
+      <div class="m-account" [hidden]="mUser.loginType!=3" *ngIf="mUser">
+        <div class="m-user"> {{mUser.name}} </div>
+        <div class="btn-box">
+          <button ion-button (click)="onClickLogout()" tappable>Đăng xuất</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ion-header>
+
+
+<ion-content>
+  <div padding>
+    <div class="large-font">{{mNews.title}}</div>
+    <div class="sub-string">{{mNews.timeCreated | timeToString}}</div>
+    <div padding-top>
+      <img style="height: 30vw; width: 100%;" [src]="mNews.thumbnail || './assets/imgs/book2.jpg'">
+    </div>
+    <div padding-top class="big-font">{{mNews.description}}</div>
+  </div>
+</ion-content>

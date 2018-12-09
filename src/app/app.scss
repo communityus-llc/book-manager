@@ -24,11 +24,17 @@
 }
 
 .space-between {
+    display: flex;
+    align-items: center;
     justify-content: space-between;
 }
 
 .width-web {
     width: 1440px;
+}
+
+.bold {
+    font-weight: bold;
 }
 
 //===========================FONT============================
@@ -50,4 +56,18 @@
 
 .small-font {
     font-size: 1.5rem;
+}
+
+.color-green {
+    color: rgb(118, 187, 14);
+}
+
+.color-white {
+    color: white
+}
+.bg-white {
+    background-color: white;
+}
+.bg-wheat {
+    background-color: wheat;
 }

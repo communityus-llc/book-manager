@@ -86,3 +86,16 @@ $colors: (
 
 @import "roboto";
 @import "noto-sans";
+
+@font-face {
+  font-family: 'NSIntel';
+  src:
+    url('../assets/fonts/NSIntel.ttf?11mubg') format('truetype'),
+    url('../assets/fonts/NSIntel.woff?11mubg') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+$font-family-md-base: 'NSIntel';
+
+$font-family-ios-base: 'NSIntel';

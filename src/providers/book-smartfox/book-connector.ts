@@ -313,9 +313,9 @@ export class BookSFSConnector extends SFSConnector {
     }
 
 
-    public sendRequestUSER_GET_LIST_ORDER() {
+    public sendRequestUSER_GET_LIST_ORDER(userID?: number) {
         let params = new SFS2X.SFSObject();
-
+        if (userID) params.putInt(ParamsKey.USER_ID, userID);
 
         this.send(this.mBook + BookSFSCmd.USER_GET_LIST_ORDER, params);
     }

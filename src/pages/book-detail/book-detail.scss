@@ -1,0 +1,54 @@
+page-book-detail {
+    ion-header{
+        background-color: rebeccapurple;
+    }
+    .scroll-content {
+        background-color: whitesmoke;
+    }
+    .m-logo {
+        height: 100px;
+        width: 300px;
+    }
+    .m-tabs {
+        display: flex;
+        font-size: 2rem;
+        color: rgba($color: white, $alpha: 1);
+        .item {
+            padding: 10px;
+        }
+    }
+    .m-register {
+        display: flex;
+        float: right;
+        .user-input{
+            width: 150px;
+        }
+        .user-input {
+            width: 150px;
+        }
+    }
+    .m-account {
+        display: flex;
+        float: right;
+        .user-input{
+            width: 150px;
+        }
+        .user-input {
+            width: 150px;
+        }
+    }
+    .m-user {
+        font-size: 2.5rem;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        color: white;
+        font-weight: bold;
+    }
+    .btn-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 16px;
+    }
+}

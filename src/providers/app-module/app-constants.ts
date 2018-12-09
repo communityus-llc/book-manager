@@ -10,3 +10,20 @@ export const PLATFORM = {
     ANDROID: 1,
     IOS: 2
 }
+
+export const BUTTON_TYPE = {
+    SAVE: 1,
+    UPDATE: 2,
+    DELETE: 9,
+    CONFIRM: 3,
+    COMPLETE: 4,
+    CANCEL: 5
+}
+
+export const ORDER_TYPE = {
+    WAIT: 0,
+    PENDING: 1,
+    CONFIRMED: 2,
+    COMPLETE: 3,
+    CANCEL: 4
+}

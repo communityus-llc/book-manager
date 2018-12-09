@@ -5,6 +5,10 @@ page-main {
     ion-slides {
         max-width: 1440px;
     }
+
+    .scroll-content {
+        background-color: whitesmoke;
+    }
     .m-logo {
         height: 100px;
         width: 300px;
@@ -257,6 +261,14 @@ page-main {
         .menu-selected {
             color: white
         }
+    }
+
+    .sub-string {
+        color: gray;
+    }
+
+    .hidden-shop {
+        display: none;
     }
 
     
