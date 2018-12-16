@@ -39,5 +39,7 @@ export class BookSFSCmd {
     public static 	USER_UPDATE_ORDER				:string = "user_update_order";
     public static 	USER_ADD_ORDER					:string = "user_add_order";
     public static 	USER_DELETE_ORDER				:string = "user_delete_order";
+    
+    public static 	UPLOAD_IMAGE				    :string = "upload_image";
 
 }

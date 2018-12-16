@@ -6,6 +6,8 @@ import { BookSFSConnector } from '../../providers/book-smartfox/book-connector';
 import { BookBaseExtension } from '../../providers/book-smartfox/book-base-extensions';
 import { BookSFSCmd } from '../../providers/book-smartfox/book-cmd';
 import { BUTTON_TYPE } from '../../providers/app-module/app-constants';
+import { UploadFileModule } from '../../providers/upload-image/upload-file';
+import { UploadType } from '../../providers/upload-image/upload-type';
 
 /**
  * Generated class for the ModalBookPage page.
@@ -34,7 +36,7 @@ export class ModalBookPage {
     if (this.navParams.data["params"]) {
       this.mBooks = this.navParams.get("params");
       console.log(this.mBooks);
-      
+
     }
   }
 
@@ -65,6 +67,9 @@ export class ModalBookPage {
       else if (cmd == BookSFSCmd.USER_DELETE_BOOK) {
         this.onExtensionUSER_DELETE_BOOK(data);
       }
+      else if (cmd == BookSFSCmd.UPLOAD_IMAGE) {
+        this.onExtensionUploadImage(data);
+      }
     } else {
       this.mAppModule.showParamsMessage(params);
     }
@@ -72,7 +77,7 @@ export class ModalBookPage {
 
   onExtensionUSER_UPDATE_BOOK(data) {
     console.log(data);
-    
+
     if (data && data.getBookID() > -1) {
       this.mViewController.dismiss({ data: data, type: BUTTON_TYPE.UPDATE });
     }
@@ -82,6 +87,18 @@ export class ModalBookPage {
     if (data && data.getBookID() > -1) {
       this.mViewController.dismiss({ data: data, type: BUTTON_TYPE.DELETE });
     }
+  }
+
+  onExtensionUploadImage(data) {
+    this.mAppModule.hideLoading();
+    if (data) {
+      console.log(data);
+      this.mBooks.setThumbnail(data.url);
+
+    } else {
+      this.mAppModule.showToast("Upload thất bại");
+    }
+
   }
 
   onClickSaveBook() {
@@ -100,6 +117,21 @@ export class ModalBookPage {
         console.log(this.mBooks);
 
         BookSFSConnector.getInstance().sendRequestUSER_DELETE_BOOK(this.mBooks.getBookID());
+      }
+    });
+  }
+
+  mLogoFile: any;
+
+  onClickImage() {
+    UploadFileModule.getInstance()._openFileInBrowser((res) => {
+      if (res) {
+
+        this.mLogoFile = res.selectedFile;
+        this.mBooks.setThumbnail(res.avatar);
+        this.mAppModule.showLoadingNoduration().then(() => {
+          UploadFileModule.getInstance()._onUploadFileInBrowser(this.mLogoFile, UploadType.COVER, "true");
+        });
       }
     });
   }

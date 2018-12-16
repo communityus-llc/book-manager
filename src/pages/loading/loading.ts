@@ -6,6 +6,8 @@ import { AppModuleProvider } from '../../providers/app-module/app-module';
 import { APPKEYS } from '../../providers/app-module/app-keys';
 import { BookSFSConnector } from '../../providers/book-smartfox/book-connector';
 import { UserInfo } from '../../providers/bean/user-info';
+import { UploadFileModule } from '../../providers/upload-image/upload-file';
+import { HttpClient } from '@angular/common/http';
 
 /**
  * Generated class for the LoadingPage page.
@@ -31,9 +33,12 @@ export class LoadingPage {
     public mPlatform: Platform,
     public mAppModule: AppModuleProvider,
     public mAlertController: AlertController,
-    public navCtrl: NavController, public navParams: NavParams
+    public navCtrl: NavController, public navParams: NavParams,
+    public mHttpClient: HttpClient
   ) {
     this.onLoadParams();
+    UploadFileModule.getInstance()._initiallize(mHttpClient);
+
   }
 
 

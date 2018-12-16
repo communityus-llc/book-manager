@@ -12,6 +12,7 @@ import { UserBean } from '../../providers/bean/UserBean';
 import { BookBean } from '../../providers/bean/BookBean';
 import { NewsBean } from '../../providers/bean/NewsBean';
 import { OrderBean } from '../../providers/bean/OrderBean';
+import { Utils } from '../../providers/core/app/utils';
 
 /**
  * Generated class for the MainPage page.
@@ -46,6 +47,9 @@ export class MainPage {
 
 
   listBooks: Array<BookBean> = [];
+  listBooksFilter: Array<BookBean> = [];
+
+
   listNews: Array<NewsBean> = [];
   listOrders: Array<OrderBean> = [];
 
@@ -161,6 +165,7 @@ export class MainPage {
         return a.getTimeCreated() - b.getTimeCreated();
       });
       this.listBooks = data;
+      this.listBooksFilter = data;
       this.onLoadFourBook();
     }
 
@@ -380,5 +385,18 @@ export class MainPage {
     item.setState(1);
     this.listBooksOrder.push(item);
     this.onCaculateTotal();
+  }
+
+  searchQuery: string = "";
+  oldSearchQuery: string = "";
+
+  doSearchLocal() {
+    if (this.searchQuery.trim() != '') {
+      this.listBooksFilter = this.listBooks.filter(item => {
+        return Utils.bodauTiengViet(item.getName().toLowerCase()).includes(this.searchQuery);
+      })
+    } else {
+      this.listBooksFilter = this.listBooks;
+    }
   }
 }

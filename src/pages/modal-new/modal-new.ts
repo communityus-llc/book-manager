@@ -6,6 +6,8 @@ import { BookSFSConnector } from '../../providers/book-smartfox/book-connector';
 import { BookBaseExtension } from '../../providers/book-smartfox/book-base-extensions';
 import { BookSFSCmd } from '../../providers/book-smartfox/book-cmd';
 import { BUTTON_TYPE } from '../../providers/app-module/app-constants';
+import { UploadFileModule } from '../../providers/upload-image/upload-file';
+import { UploadType } from '../../providers/upload-image/upload-type';
 
 /**
  * Generated class for the ModalNewPage page.
@@ -65,6 +67,9 @@ export class ModalNewPage {
       else if (cmd == BookSFSCmd.USER_DELETE_NEW) {
         this.onExtensionUSER_DELETE_NEW(data);
       }
+      else if (cmd == BookSFSCmd.UPLOAD_IMAGE) {
+        this.onExtensionUploadImage(data);
+      }
     } else {
       this.mAppModule.showParamsMessage(params);
     }
@@ -84,6 +89,18 @@ export class ModalNewPage {
     }
   }
 
+  onExtensionUploadImage(data) {
+    this.mAppModule.hideLoading();
+    if (data) {
+      console.log(data);
+      this.mNews.setThumbnail(data.url);
+
+    } else {
+      this.mAppModule.showToast("Upload thất bại");
+    }
+
+  }
+
   onClickSaveNew() {
     this.mAppModule.showAlert("Bạn có chắc muốn lưu bản tin này?", res => {
       if (res == 1) {
@@ -100,6 +117,21 @@ export class ModalNewPage {
         console.log(this.mNews);
 
         BookSFSConnector.getInstance().sendRequestUSER_DELETE_NEW(this.mNews.getNewID());
+      }
+    });
+  }
+
+  mLogoFile: any;
+
+  onClickImage() {
+    UploadFileModule.getInstance()._openFileInBrowser((res) => {
+      if (res) {
+
+        this.mLogoFile = res.selectedFile;
+        this.mNews.setThumbnail(res.avatar);
+        this.mAppModule.showLoadingNoduration().then(() => {
+          UploadFileModule.getInstance()._onUploadFileInBrowser(this.mLogoFile, UploadType.COVER, "true");
+        });
       }
     });
   }

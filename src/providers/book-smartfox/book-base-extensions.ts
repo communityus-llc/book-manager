@@ -4,6 +4,7 @@ import { BookSFSCmd } from "./book-cmd";
 import { BookBean } from "../bean/BookBean";
 import { NewsBean } from "../bean/NewsBean";
 import { OrderBean } from "../bean/OrderBean";
+import { BookSFSConnector } from "./book-connector";
 
 export class BookBaseExtension extends SfsClientBaseExtension {
     public static _instance: BookBaseExtension = null;
@@ -65,6 +66,10 @@ export class BookBaseExtension extends SfsClientBaseExtension {
         }
         else if (cmd == BookSFSCmd.USER_DELETE_ORDER) {
             return this.onExtensionUSER_DELETE_ORDER(params);
+        }
+
+        else if (cmd == BookSFSCmd.UPLOAD_IMAGE) {
+            return this.onExtensionUPLOAD_IMAGE(params);
         }
 
     }
@@ -180,5 +185,29 @@ export class BookBaseExtension extends SfsClientBaseExtension {
         let object = new OrderBean();
         object.fromSFSObject(info);
         return object;
+    }
+
+    public onExtensionUPLOAD_IMAGE(params) {
+        let data = this.doParseArrayExtensions(params);
+        let array = data.array;
+        let type;
+
+        if (data.content.containsKey("__type")) {
+            type = data.content.getUtfString("__type");
+        }
+
+        let url: any;
+        if (array && type != 4) {
+            url = "http://" + BookSFSConnector.getInstance().getSFSHost() + ":" + BookSFSConnector.getInstance().getSFSPort() + "/" + array.getSFSObject(0).getUtfString(ParamsKey.URL);
+        }
+
+        if (type == 4) {
+            url = [];
+            for (let i = 0; i < array.size(); i++) {
+                let source = "http://" + BookSFSConnector.getInstance().getSFSHost() + ":" + BookSFSConnector.getInstance().getSFSPort() + "/" + array.getSFSObject(i).getUtfString(ParamsKey.URL);
+                url.push(source);
+            }
+        }
+        return { url: url, type: type };
     }
 }

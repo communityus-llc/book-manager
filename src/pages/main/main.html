@@ -140,11 +140,14 @@
           <button ion-button (click)="onClickGoToShop()" tappable>Đến giỏ hàng</button>
         </div>
       </div>
+
+      <ion-searchbar mode="ios" placeholder="Nhập tên sách cần tìm" [(ngModel)]="searchQuery" (ionInput)="doSearchLocal()"></ion-searchbar>
+
       <ion-row>
-        <ion-col col-4 *ngFor="let item of listBooks">
+        <ion-col col-4 *ngFor="let item of listBooksFilter">
           <div class="bg-white" padding>
-            <div (click)="onClickBook(item)" tappable>
-              <img [src]="item.thumbnail || './assets/imgs/book3.jpg'">
+            <div style="height: 250px; width: 100%;" (click)="onClickBook(item)" tappable>
+              <img style="height: 100%; width: 100%" [src]="item.thumbnail || './assets/imgs/book3.jpg'">
             </div>
             <div class="space-between">
               <div (click)="onClickBook(item)" tappable>
@@ -181,8 +184,8 @@
       <ion-row>
         <ion-col col-4 *ngFor="let item of listNews" (click)="onClickNew(item)" tappable>
           <div class="bg-white" padding>
-            <div>
-              <img [src]="item.thumbnail || './assets/imgs/book1.jpg'">
+            <div style="height: 250px; width: 100%;" >
+              <img style="height: 100%; width: 100%" [src]="item.thumbnail || './assets/imgs/book1.jpg'">
             </div>
             <div class="big-font">{{item.title}}</div>
             <div class="sub-title sub-string">{{item.timeCreated | timeToString}}</div>

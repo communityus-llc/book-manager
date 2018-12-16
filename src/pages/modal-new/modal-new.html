@@ -29,6 +29,13 @@
       <ion-label stacked>Nội dung</ion-label>
       <ion-textarea rows="10" [(ngModel)]="mNews.description"></ion-textarea>
     </ion-item>
+    <ion-item>
+      <ion-label stacked>Ảnh</ion-label>
+    </ion-item>
+    <div class="center" (click)="onClickImage()">
+      <div class="new-thumbnail" [ngStyle]="{'background-image':mNews.thumbnail ? 'url('+mNews.thumbnail+')' : 'url(./assets/imgs/book3.jpg)'}"></div>
+    </div>
+
   </ion-list>
   <div class="center">
     <div padding-right>

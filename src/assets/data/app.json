@@ -3,8 +3,8 @@
     "name": "Cafe 69",
     "config": {
         "get_config": false,
-        "android": "http://p2o.wiimob.com/appinasia/config/bongdaphui_android_1.json",
-        "ios": "http://p2o.wiimob.com/appinasia/config/bongdaphui_ios_1.json"
+        "android": "",
+        "ios": ""
     },
     "social": {
         "facebook": "",

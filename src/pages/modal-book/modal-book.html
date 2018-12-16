@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>modal-book</ion-title>
+    <ion-title>{{mBooks.name}}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -19,10 +19,20 @@
       <ion-label stacked>Tên sách</ion-label>
       <ion-input [(ngModel)]="mBooks.name"></ion-input>
     </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Ảnh bìa</ion-label>
+    </ion-item>
+    <div class="center" (click)="onClickImage()">
+      <div class="book-thumbnail" [ngStyle]="{'background-image':mBooks.thumbnail ? 'url('+mBooks.thumbnail+')' : 'url(./assets/imgs/book3.jpg)'}"></div>
+    </div>
+
+
     <ion-item>
       <ion-label stacked>Giá</ion-label>
       <ion-input [(ngModel)]="mBooks.price"></ion-input>
     </ion-item>
+
     <ion-item>
       <ion-label stacked>Mô tả</ion-label>
       <ion-textarea rows="2" [(ngModel)]="mBooks.description"></ion-textarea>
