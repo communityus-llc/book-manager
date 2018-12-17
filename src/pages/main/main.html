@@ -28,11 +28,12 @@
         </div>
         <div class="btn-box">
           <button ion-button (click)="onClickLogin()" tappable>Đăng nhập</button>
+          <button ion-button outline (click)="onClickRegister()" tappable>Đăng ký</button>
         </div>
       </div>
 
       <div class="m-account" [hidden]="mUser.loginType!=3" *ngIf="mUser">
-        <div class="m-user"> {{mUser.name}} </div>
+        <div class="m-user" (click)="onClickProfile()"> {{mUser.name}} </div>
         <div class="btn-box">
           <button ion-button (click)="onClickLogout()" tappable>Đăng xuất</button>
         </div>

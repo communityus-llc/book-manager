@@ -121,7 +121,7 @@ export class LoadingPage {
         this.mAppModule.getStoreController().removeKeyDataFromStorage(APPKEYS.USER_INFO);
         this.mAppModule.getStoreController().saveDataToStorage(APPKEYS.USER_INFO, JSON.stringify(this.userInfo));
       }, error => {
-        this.onLogginError(error);
+        // this.onLogginError(error);
       });
     } else {
       this.mAppModule.doLoginByGuest().then(params => {

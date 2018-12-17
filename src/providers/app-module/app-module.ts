@@ -84,6 +84,9 @@ export class AppModuleProvider {
   public getUser(): UserBean {
     return this.mUser;
   }
+  public setUser(user: UserBean) {
+    this.mUser = user;
+  }
 
   loginSucess() {
     return this.mStorageController.saveDataToStorage(APPKEYS.LOGIN_STATUS, true);
@@ -336,6 +339,68 @@ export class AppModuleProvider {
         callback(1);
       }
     });
+    alert.present();
+  }
+
+  public showPromptChangeProfile(title: string, message: string, callback: any) {
+    let alert = this.mAlertController.create();
+    alert.setTitle(title);
+    alert.setMessage(message);
+    alert.addButton({
+      text: "Cancel",
+      role: "cancel",
+      handler: () => {
+        callback();
+      }
+    });
+
+    alert.addButton({
+      text: "OK",
+      handler: data => {
+        callback(data);
+      }
+    });
+
+    alert.addInput({
+      placeholder: "Nhập thông tin mới",
+      type: "text"
+    });
+
+    alert.present();
+  }
+
+  public showPromptChangePassword(
+    title: string,
+    message: string,
+    callback: any
+  ) {
+    let alert = this.mAlertController.create();
+    alert.setTitle(title);
+    alert.setMessage(message);
+    alert.addButton({
+      text: "Cancel",
+      role: "cancel",
+      handler: () => {
+        callback();
+      }
+    });
+
+    alert.addButton({
+      text: "OK",
+      handler: data => {
+        callback(data);
+      }
+    });
+
+    alert.addInput({
+      placeholder: "Mật khẩu cũ",
+      type: "password"
+    });
+    alert.addInput({
+      placeholder: "Mật khẩu mới",
+      type: "password"
+    });
+
     alert.present();
   }
 

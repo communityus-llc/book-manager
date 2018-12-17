@@ -10,6 +10,7 @@ import { UserInfo } from "../bean/user-info";
 import { NewsBean } from "../bean/NewsBean";
 import { BookBean } from "../bean/BookBean";
 import { OrderBean } from "../bean/OrderBean";
+import { UserBean } from "../bean/UserBean";
 
 var SFS2X = window['SFS2X'];
 
@@ -339,6 +340,26 @@ export class BookSFSConnector extends SFSConnector {
         params.putInt(ParamsKey.ORDER_ID, orderID);
 
         this.send(this.mBook + BookSFSCmd.USER_DELETE_ORDER, params);
+    }
+
+    public sendRequestUSER_GET_INFO() {
+        let params = new SFS2X.SFSObject();
+
+        this.send(this.mBook + BookSFSCmd.USER_GET_INFO, params);
+    }
+
+    public sendRequestUSER_UPDATE_INFO(user: UserBean) {
+        let params = new SFS2X.SFSObject();
+        params = user.toSFSObject(params);
+
+        this.send(this.mBook + BookSFSCmd.USER_UPDATE_INFO, params);
+    }
+
+    public sendRequestUSER_REGISTER(user: UserBean) {
+        let params = new SFS2X.SFSObject();
+        params = user.toSFSObject(params);
+
+        this.send(this.mBook + BookSFSCmd.USER_REGISTER, params);
     }
 
 }

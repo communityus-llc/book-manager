@@ -5,6 +5,7 @@ import { BookBean } from "../bean/BookBean";
 import { NewsBean } from "../bean/NewsBean";
 import { OrderBean } from "../bean/OrderBean";
 import { BookSFSConnector } from "./book-connector";
+import { UserBean } from "../bean/UserBean";
 
 export class BookBaseExtension extends SfsClientBaseExtension {
     public static _instance: BookBaseExtension = null;
@@ -70,6 +71,17 @@ export class BookBaseExtension extends SfsClientBaseExtension {
 
         else if (cmd == BookSFSCmd.UPLOAD_IMAGE) {
             return this.onExtensionUPLOAD_IMAGE(params);
+        }
+
+        else if (cmd == BookSFSCmd.USER_GET_INFO) {
+            return this.onExtensionUSER_GET_INFO(params);
+        }
+        else if (cmd == BookSFSCmd.USER_UPDATE_INFO) {
+            return this.onExtensionUSER_UPDATE_INFO(params);
+
+        }
+        else if (cmd == BookSFSCmd.USER_REGISTER) {
+            return this.onExtensionUSER_REGISTER(params);
         }
 
     }
@@ -209,5 +221,29 @@ export class BookBaseExtension extends SfsClientBaseExtension {
             }
         }
         return { url: url, type: type };
+    }
+
+    public onExtensionUSER_GET_INFO(params) {
+        let data = this.doParseInfo(params);
+        let info = data.info;
+        let object = new UserBean();
+        object.fromSFSObject(info);
+        return object;
+    }
+
+    public onExtensionUSER_UPDATE_INFO(params) {
+        let data = this.doParseInfo(params);
+        let info = data.info;
+        let object = new UserBean();
+        object.fromSFSObject(info);
+        return object;
+    }
+
+    public onExtensionUSER_REGISTER(params) {
+        let data = this.doParseInfo(params);
+        let info = data.info;
+        let object = new UserBean();
+        object.fromSFSObject(info);
+        return object;
     }
 }

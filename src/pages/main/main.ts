@@ -226,6 +226,10 @@ export class MainPage {
     })
   }
 
+  onClickRegister() {
+    this.navCtrl.push("RegisterPage");
+  }
+
   onClickLogout() {
     BookSFSConnector.getInstance().disconnect().then(() => {
       this.mAppModule.getStoreController().removeKeyDataFromStorage(APPKEYS.USER_INFO).then(() => {
@@ -398,5 +402,9 @@ export class MainPage {
     } else {
       this.listBooksFilter = this.listBooks;
     }
+  }
+
+  onClickProfile(){
+    this.navCtrl.push("ProfilePage");
   }
 }

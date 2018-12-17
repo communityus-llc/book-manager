@@ -4,8 +4,7 @@ export class BookSFSCmd {
     public static PING: string = "ping";
     public static UPDATE_LOGIN_DEVICE: string = "update_login_device";
     public static LOGIN: string = "login";
-    public static USER_GET_INFO: string = "user_get_info";
-    public static USER_UPDATE_INFO: string = "user_update_info";
+
     public static USER_SEARCH_USER: string = "user_search_user";
     public static USER_SEARCH_RESTAURANT: string = "user_search_restaurant";
     public static USER_GET_LIST_RESTAURANTS: string = "user_get_list_restaurants";
@@ -41,5 +40,9 @@ export class BookSFSCmd {
     public static 	USER_DELETE_ORDER				:string = "user_delete_order";
     
     public static 	UPLOAD_IMAGE				    :string = "upload_image";
+
+    public static   USER_GET_INFO                   :string = "user_get_info";
+    public static   USER_UPDATE_INFO                :string = "user_update_info";
+    public static   USER_REGISTER                   :string = "user_register";
 
 }
