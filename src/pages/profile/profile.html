@@ -36,7 +36,7 @@
   </div>
   <ion-item>
     <ion-label stacked>Họ tên</ion-label>
-    <ion-label class="between-space">
+    <ion-label class="space-between">
       <div>{{mUser.name}}</div>
       <div (click)="onClickChange(1)" tappable>
         <ion-icon name="ios-create"></ion-icon>
@@ -47,7 +47,7 @@
   <ion-item>
     <ion-label stacked>Số điện thoại</ion-label>
 
-    <ion-label class="between-space">
+    <ion-label class="space-between">
       <div>{{mUser.phone || '0123456789'}}</div>
       <div (click)="onClickChange(2)" tappable>
         <ion-icon name="ios-create"></ion-icon>
@@ -57,7 +57,7 @@
 
   <ion-item>
     <ion-label stacked>Địa chỉ email</ion-label>
-    <ion-label class="between-space">
+    <ion-label class="space-between">
       <div>{{mUser.email || 'email@gmail.com'}}</div>
       <div (click)="onClickChange(3)" tappable>
         <ion-icon name="ios-create"></ion-icon>
@@ -67,7 +67,7 @@
 
   <ion-item>
     <ion-label stacked>Mật khẩu</ion-label>
-    <ion-label class="between-space">
+    <ion-label class="space-between">
       <div>******</div>
       <div (click)="onClickChange(4)" tappable>
         <ion-icon name="ios-create"></ion-icon>

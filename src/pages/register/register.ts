@@ -9,6 +9,8 @@ import { UploadFileModule } from '../../providers/upload-image/upload-file';
 import { UploadType } from '../../providers/upload-image/upload-type';
 import { UserInfo } from '../../providers/bean/user-info';
 
+import md5 from 'md5';
+
 /**
  * Generated class for the RegisterPage page.
  *
@@ -90,7 +92,7 @@ export class RegisterPage {
       this.mAppModule.setUser(data);
       this.mUser = data;
       this.userInfo.setUsername(this.mUser.getUsername());
-      this.userInfo.setPassword(this.mUser.getPassword());
+      this.userInfo.setPassword(this.rePassword);
       BookSFSConnector.getInstance().disconnect().then(() => {
         this.navCtrl.push("LoadingPage", { params: this.userInfo });
 
@@ -128,7 +130,7 @@ export class RegisterPage {
 
   onClickRegister() {
     if ((this.password.trim() != "") && (this.password.trim() == this.rePassword.trim()) && this.mUser.getName().trim() != "" && this.mUser.getUsername().trim() != "") {
-      this.mUser.setPassword(this.rePassword);
+      this.mUser.setPassword(md5(this.rePassword));
       this.mAppModule.showLoading().then(() => {
         BookSFSConnector.getInstance().sendRequestUSER_REGISTER(this.mUser);
       })
